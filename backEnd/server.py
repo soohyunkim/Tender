@@ -3,6 +3,7 @@ from flask import Flask, abort
 app = Flask(__name__)
 
 
+# GET here to retrieve the main landing page
 @app.route('/')
 def index():
     abort(404)
