@@ -49,12 +49,11 @@ def options():
         json_response = json.loads(urllib.request.urlopen(url).read())
 
         restaurants = json_response["businesses"]
-        restaurant_ids = []
         for restaurant in restaurants:
-            restaurant_ids.append(restaurant["id"])
+            votes_data = {"votes": 0}
+            database.child(event_id).child("restaurants").child(restaurant["id"]).set(votes_data)
 
         # add event to Firebase
-        database.child(event_id).child("restaurants").set(restaurant_ids)
         database.child(event_id).child("location").set(location)
         database.child(event_id).child("radius").set(radius)
         database.child(event_id).child("categories").set(categories)
@@ -80,7 +79,6 @@ def vote():
         event_id = request.args.get("event_id")
 
         prev_vote = database.child(event_id).child("restaurants").child(restaurant_id).child("votes").get(user['idToken']).val()
-        prev_vote = 0 if prev_vote is None else prev_vote
         vote = 1 if approval else 0
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
         # return json representing votes
