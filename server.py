@@ -106,7 +106,7 @@ def detail_vote():
     # return list of resto they can vote on
     if request.method == 'GET':
         event_id = request.args.get("event_id")
-        return database.child(event_id).child("restaurants").get(user['idToken']).val(), 200
+        return json.dumps(database.child(event_id).child("restaurants").get(user['idToken']).val()), 200
     abort(404)
 
 
