@@ -119,15 +119,29 @@ def detail_event():
     event_id = request.args.get("event_id")
     event_details = database.child(event_id).get(user['idToken']).val()
 
-    if hasattr(event_details, "winner"):
-        return json.dumps(event_details["winner"])
+    # if all users no longer have restaurants attached to them, voting has ended
+    users = event_details["users"]
+    is_voting_finished = True
+    for email in users:
+        if len(users[email]["restaurants"]) != 0:
+            is_voting_finished = False
+
+    if is_voting_finished:
+        if hasattr(event_details, "winner"):
+            # if winner has already been found, return it
+            return json.dumps(event_details["winner"])
+        else:
+            # if winner hasn't been found yet,
+            # loop through restaurants to figure out which restaurant has the most votes,
+            # update event on Firebase with winner and return it
+            restaurants = event_details["restaurants"]
+            current_winner = ""
+            current_winner_votes = -1
+            for restaurant in restaurants:
+                if restaurants[restaurant]["votes"] > current_winner_votes:
+                    current_winner = restaurant
+                    current_winner_votes = restaurants[restaurant]["votes"]
+            database.child(event_id).child("winner").set(current_winner)
+            return json.dumps(current_winner)
     else:
-        restaurants = event_details["restaurants"]
-        current_winner = ""
-        current_winner_votes = -1
-        for restaurant in restaurants:
-            if restaurants[restaurant]["votes"] > current_winner_votes:
-                current_winner = restaurant
-                current_winner_votes = restaurants[restaurant]["votes"]
-        database.child(event_id).child("winner").set(current_winner)
-        return json.dumps(current_winner)
+        return json.dumps("voting not finished")
