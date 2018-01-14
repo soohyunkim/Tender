@@ -13,10 +13,10 @@ def index():
     return render_template('index.html')
 
 
-# GET here to retrieve an event,
+# GET here to retrieve the create-event options page,
 # POST here to create a new event
-@app.route('/event', methods=['GET', 'POST'])
-def event():
+@app.route('/options', methods=['GET', 'POST'])
+def options():
     if request.method == 'POST':
         # parse out parameters from POST request
 
@@ -40,13 +40,28 @@ def event():
         for restaurant in restaurants:
             print(restaurant)
         abort(404)
-    if request.method == 'GET':
-        abort(404)
     abort(404)
 
 
-# GET here to retrieve voting options,
+# GET here to retrieve voting page,
 # POST here to submit votes
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
+    abort(404)
+
+
+# GET here to retrieve event page
+@app.route('event')
+def event():
+    abort(404)
+
+
+# GET here to retrieve voting details
+@app.route('/detail/vote')
+def detail_vote():
+    abort(404)
+
+# GET here to retrieve event details
+@app.route('/detail/event')
+def detail_event():
     abort(404)
