@@ -7,7 +7,7 @@ $(document).ready(function () {
     var event_id = $("#event_id");
     var user_email = $("#user_email");
 
-    var url = "http://127.0.0.1:5000//detail/event?event_id=" + event_id;
+    var url = "http://127.0.0.1:5000/detail/event?event_id=" + event_id;
     var http = new XMLHttpRequest();
     http.open("GET", url, false);
     http.send();
@@ -25,3 +25,10 @@ function populate_page(event_id, event_details) {
 $("#button").click(function () {
 
 });
+
+function submit_vote(user_email, restaurant_id, approval, event_id) {
+    var url = "http://127.0.0.1:5000/vote?" + "user_email=" + user_email + "&restaurant_id=" + restaurant_id + "&approval=" + approval + "&event_id=" + event_id;
+    var http = new XMLHttpRequest();
+    http.open("POST", url, false);
+    http.send();
+}
