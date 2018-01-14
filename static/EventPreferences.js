@@ -34,6 +34,8 @@ $("#button").click(function() {
 	var priceThree = $("#price-three-button").is(':checked');
 	var priceFour = $("#price-four-button").is(':checked');
 
+	var dateAndTime = Date.parse($("#date-input").val())/1000;
+
 	var priceString = "";
 	if (priceOne) {
 		priceString += "1";
@@ -63,7 +65,7 @@ $("#button").click(function() {
 		"&radius=" + mDistance +
 		"&location=" + "UBC%2C+Vancouver%2C+British+Columbia" +
 		"&limit=" + 15 +
-		"&open_at=" + 1515888889;
+		"&open_at=" + dateAndTime;
 	if (priceString.length > 0) {
 		params += "&price=" + priceString;
 	}

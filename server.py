@@ -64,7 +64,7 @@ def options():
         database.child(event_id).child("open_at").set(open_at)
 
         return Response(status=200, mimetype='application/json')
-    abort(404)
+    abort(405)
 
 
 # GET here to retrieve voting page,
@@ -85,29 +85,30 @@ def vote():
         else:
             vote = 0
 
+
+# remove restaurant_id from user...
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
-        # return json representing votes
-        # return render_template('TODO.html'), 200
 
     if request.method == 'GET':
         return render_template('votingPage.html'), 200
         # return voting status, for every restaurant
-    abort(404)
+    abort(405)
 
 # GET here to retrieve event page
 @app.route('/event')
 def event():
-    abort(404)
+    abort(405)
 
 
 # GET here to retrieve voting details
 @app.route('/detail/vote')
 def detail_vote():
-    # return list of resto they can vote on
+    # return list of resto_id, and valid
+    # return json representing votes
     if request.method == 'GET':
         event_id = request.args.get("event_id")
         return json.dumps(database.child(event_id).child("restaurants").get(user['idToken']).val()), 200
-    abort(404)
+    abort(405)
 
 
 # GET here to retrieve event details
