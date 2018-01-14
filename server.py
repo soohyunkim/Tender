@@ -1,4 +1,4 @@
-from flask import Flask, abort, request, render_template, redirect, url_for
+from flask import Flask, abort, request, render_template, Response, redirect, url_for
 import urllib.parse
 import urllib.request
 import json
@@ -61,9 +61,7 @@ def options():
         database.child(event_id).child("price").set(price)
         database.child(event_id).child("open_at").set(open_at)
 
-        # returns json representing restaurants
-        #return render_template('TODO.html'), 200
-        abort(404)
+        return Response(status=200, mimetype='application/json')
     abort(404)
 
 
