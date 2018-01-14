@@ -5,25 +5,26 @@
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../static/EventPreferences.css">
 	<link rel="stylesheet" type="text/css" href="../static/style.css">
+	<link rel="stylesheet" type="text/css" href="../static/confirmedEventPage.css">
     <script type="text/javascript" src="../static/jquery-3.2.1.js"></script>
     <script type="text/javascript" src="../static/moment.min.js"></script>
     <script type="text/javascript" src="../static/bootstrap/js/transition.js"></script>
     <script type="text/javascript" src="../static/bootstrap/js/collapse.js"></script>
     <script type="text/javascript" src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+	    <script type="text/javascript" src="../static/confirmedEventPage.js"></script>
 </head>
 <header> header stuff here </header>
 <h1> Event Confirmed! </h1>
-<h2> Name of restaurant here </h2>
 <div class="container-confirmation">
 <div class="row">
-        <div class="col-sm-3">
-          <img src="../static/photos/photo1.jpg" alt="Sample photo">
+        <div class="event-confirmed-image-container">
+          <img id="event-confirmed-image" src="../static/photos/photo1.jpg" alt="Sample photo">
         </div>
 		<div class="col-sm">
-			<h2 class="restaurant-name"> Restaurant name here </h2>
-			<p class="price-range"> $$$ </p>
-			<p class="location"> 555 road way </p>
+			<h2 id="restaurant-name"> Restaurant name</h2>
+			<p id="price-range"> Restaurant price range </p>
+			<p id="restaurant-location"> Restaurant location</p>
+			
 		</div>
       </div>
-<p> put address and price range of restaurant here </p>
 </html>
