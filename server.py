@@ -79,15 +79,22 @@ def vote():
         event_id = request.args.get("event_id")
 
         prev_vote = database.child(event_id).child("restaurants").child(restaurant_id).child("votes").get(user['idToken']).val()
-        vote = 1 if approval else 0
+
+        if approval == "true":
+            vote = 1
+        else:
+            vote = 0
+
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
         # return json representing votes
         # return render_template('TODO.html'), 200
 
     if request.method == 'GET':
-        return render_template('vote.html'), 200
-    abort(404)
+        prev_vote = database.child(event_id).child("restaurants").child(restaurant_id).child("votes").get(
+            user['idToken']).val()
 
+        # return voting status, for every restaurant
+    abort(404)
 
 # GET here to retrieve event page
 @app.route('/event')
@@ -104,6 +111,7 @@ def detail_vote():
         return database.child(event_id).child("restaurants").get(user['idToken']).val(), 200
     abort(404)
 
+
 # GET here to retrieve event details
 # after voting ends, go through restaurants, return restaurant with most votes
 @app.route('/detail/event')
@@ -112,15 +120,14 @@ def detail_event():
     event_details = database.child(event_id).get(user['idToken']).val()
 
     if hasattr(event_details, "winner"):
-        return event_details["winner"]
+        return json.dumps(event_details["winner"])
     else:
         restaurants = event_details["restaurants"]
-        current_winner = {}
+        current_winner = ""
         current_winner_votes = -1
         for restaurant in restaurants:
-            if restaurant["votes"] > current_winner_votes:
+            if restaurants[restaurant]["votes"] > current_winner_votes:
                 current_winner = restaurant
-                current_winner_votes = restaurant["votes"]
+                current_winner_votes = restaurants[restaurant]["votes"]
         database.child(event_id).child("winner").set(current_winner)
-        return current_winner
-    abort(404)
+        return json.dumps(current_winner)

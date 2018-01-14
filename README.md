@@ -39,6 +39,7 @@ POST format in JSON:
         "4": ...,
         "5": ...
     },
+    "max_choices": ...,
     "max_distance": ...,
     "emails": [
         ...
@@ -51,6 +52,7 @@ POST format in JSON:
 `location` is the latitude and longitude of the desired search location,
 `price` contains whether certain price levels are desired (true for desired, false for undesired),
 where `1` is the cheapest price level and `5` is the most expensive price level,
+`max_choices` is the maximum number of choices the user wants displayed,
 `max_distance` is the maximum search distance away from `location`,
 and `emails` is a list of the invitees' emails.
 
@@ -60,14 +62,6 @@ Possible values for `event_type`:
 ### `/vote`
 
 GET to retrieve voting page.
-
-### `/event`
-
-GET to retrieve event page.
-
-### `/detail/vote`
-
-GET to retrieve voting details.
 POST to submit an individual vote.
 
 POST format in JSON:
@@ -82,6 +76,44 @@ POST format in JSON:
 `approval` is whether the user approves of the restaurant,
 and `user_email` is the user's email.
 
+### `/event`
+
+GET to retrieve event page.
+
+### `/detail/vote`
+
+GET to retrieve voting details.
+
+GET format in JSON:
+```JSON
+{
+    "choices": [
+        {
+            "restaurant_id": ...,
+            "valid": ...
+        },
+        ...
+    ]
+}
+```
+`choices` is a list containing
+`restaurant_id`, the Yelp ID of the restaurant to vote for,
+and `valid`, whether the user can vote on this restaurant.
+
 ### `/detail/event`
 
 GET to retrieve event details.
+
+GET format in JSON:
+```JSON
+{
+    "event_name": ...,
+    "event_type": ...,
+    "date": ...,
+    "restaurant_id": ...
+}
+```
+`event_name` is the user-input name of the event,
+`event_type` is a string representing what type of event it is (for possible values see above),
+`date` is user-input time and date of the event in Unix epoch time,
+and `restaurant_id` is the Yelp ID of the most popular restaurant (if empty, voting has not yet concluded).
