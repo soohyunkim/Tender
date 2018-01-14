@@ -187,18 +187,25 @@ def detail_vote():
     choices = []
 
     for restaurant in restaurants.each():
+        choice = {}
         valid = False
         for user_restaurant in user_restaurants.each():
             if restaurant.key() == user_restaurant.key():
                 valid = True
-        if valid:
-            choices.append({restaurant.key(): True})
-        else:
-            choices.append({restaurant.key(): False})
+        url = urllib.request.Request(
+            "https://api.yelp.com/v3/businesses/%s" % restaurant.key())
+        url.add_header('Authorization',
+                       'Bearer hJ9D0lMCziUpj-OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-Fegf_rJOLQ_eN1zebXB-3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_9CTWsLhPDy9a6JaWnYx')
+        json_response = json.loads(urllib.request.urlopen(url).read())
+        choice["id"] = restaurant.key()
+        choice["name"] = json_response["name"]
+        choice["photos"] = json_response["photos"]
+        choice["price"] = json_response["price"]
+        choice["location"] = json_response["location"]
+        choice["valid"] = valid
+        choices.append(choice)
 
-    choice = {"choices": choices}
-    # use jsonify
-    return json.dumps(choice)
+    return jsonify({"choices": choices})
 
 
 # GET here to retrieve event details
