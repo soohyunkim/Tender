@@ -1,104 +1,156 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
-          crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../static/EventPreferences.css">
-    <script type="text/javascript" src="../static/jquery-3.2.1.js"></script>
-    <script type="text/javascript" src="../static/moment.min.js"></script>
-    <script type="text/javascript" src="../static/bootstrap/js/transition.js"></script>
-    <script type="text/javascript" src="../static/bootstrap/js/collapse.js"></script>
-    <script type="text/javascript" src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	    crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	    crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="../static/EventPreferences.css">
+	<script type="text/javascript" src="../static/jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="../static/moment.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	    crossorigin="anonymous"></script>
+	<script type="text/javascript" src="../static/bootstrap/js/transition.js"></script>
+	<script type="text/javascript" src="../static/bootstrap/js/collapse.js"></script>
+	<script type="text/javascript" src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 </head>
 <div id="event-details-body">
-    <div id="event-details-body-inner">
-        <h1> Event Details </h1>
+	<div id="event-details-body-inner">
+		<h1> Event Details </h1>
 
-        <div class="event-type-form">
-            <h2> Event Type </h2>
-            <form>
-                <div class="row">
-                    <div class="radio col-sm">
-                        <label><input id="restaurants-button" type="radio" name="event-type-radio">Restaurants</label>
-                    </div>
-                    <div class="radio col-sm">
-                        <label><input id="bars-button" type="radio" name="event-type-radio">Bars</label>
-                    </div>
-                    <div class="radio col-sm">
-                        <label><input id="cafes-button" type="radio" name="event-type-radio">Cafes</label>
-                    </div>
-                    <div class="radio col-sm">
-                        <label><input id="desserts-button" type="radio" name="event-type-radio">Desserts</label>
-                    </div>
-                </div>
-            </form>
+		<div class="event-type-form">
+			<h2> Event Type </h2>
+			<form>
+				<div class="row">
+					<div class="radio col-sm">
+						<label>
+							<input id="restaurants-button" type="radio" name="event-type-radio">Restaurants</label>
+					</div>
+					<div class="radio col-sm">
+						<label>
+							<input id="bars-button" type="radio" name="event-type-radio">Bars</label>
+					</div>
+					<div class="radio col-sm">
+						<label>
+							<input id="cafes-button" type="radio" name="event-type-radio">Cafes</label>
+					</div>
+					<div class="radio col-sm">
+						<label>
+							<input id="desserts-button" type="radio" name="event-type-radio">Desserts</label>
+					</div>
+				</div>
+			</form>
 
-            <div class="price-form">
-                <h2> Price </h2>
-                <div class="row">
-                    <label class="checkbox-inline col-sm">
-                        <input id="price-one-button" type="checkbox" value="">$</label>
-                    <label class="checkbox-inline col-sm">
-                        <input id="price-two-button" type="checkbox" value="">$$</label>
-                    <label class="checkbox-inline col-sm">
-                        <input id="price-three-button" type="checkbox" value="">$$$</label>
-                    <label class="checkbox-inline col-sm">
-                        <input id="price-four-button" type="checkbox" value="">$$$$</label>
-                </div>
-            </div>
-            <div class="distance-form">
-                <h2> Distance </h2>
-                <form>
-                    <div class="row">
-                        <div class="radio col-sm">
-                            <label><input id="one-km-button" type="radio" name="event-type-radio">1 km</label>
-                        </div>
-                        <div class="radio col-sm">
-                            <label><input id="two-km-button" type="radio" name="event-type-radio">2 km</label>
-                        </div>
-                        <div class="radio col-sm">
-                            <label><input id="five-km-button" type="radio" name="event-type-radio">5 km</label>
-                        </div>
-                        <div class="radio col-sm">
-                            <label><input id="ten-km-button" type="radio" name="event-type-radio">10 km</label>
-                        </div>
-                        <div class="radio col-sm">
-                            <label><input id="thirty-km-button" type="radio" name="event-type-radio">30 km</label>
-                        </div>
-                    </div>
-                </form>
+			<div class="price-form">
+				<h2> Price </h2>
+				<div class="row">
+					<label class="checkbox-inline col-sm">
+						<input id="price-one-button" type="checkbox" value="">$</label>
+					<label class="checkbox-inline col-sm">
+						<input id="price-two-button" type="checkbox" value="">$$</label>
+					<label class="checkbox-inline col-sm">
+						<input id="price-three-button" type="checkbox" value="">$$$</label>
+					<label class="checkbox-inline col-sm">
+						<input id="price-four-button" type="checkbox" value="">$$$$</label>
+				</div>
+			</div>
+			<div class="distance-form">
+				<h2> Distance </h2>
+				<form>
+					<div class="row">
+						<div class="radio col-sm">
+							<label>
+								<input id="one-km-button" type="radio" name="event-type-radio">1 km</label>
+						</div>
+						<div class="radio col-sm">
+							<label>
+								<input id="two-km-button" type="radio" name="event-type-radio">2 km</label>
+						</div>
+						<div class="radio col-sm">
+							<label>
+								<input id="five-km-button" type="radio" name="event-type-radio">5 km</label>
+						</div>
+						<div class="radio col-sm">
+							<label>
+								<input id="ten-km-button" type="radio" name="event-type-radio">10 km</label>
+						</div>
+						<div class="radio col-sm">
+							<label>
+								<input id="thirty-km-button" type="radio" name="event-type-radio">30 km</label>
+						</div>
+					</div>
+				</form>
 
-                <div class="date-form">
-                    <h2> When </h2>
-                    <div class="container">
-                        <div class="row">
-                            <div class='col-sm-6'>
-                                <div class="form-group">
-                                    <div class='input-group date' id='datetimepicker1'>
-                                        <input id="date-input" type='text' class="form-control"/>
-                                        <span class="input-group-addon">
-										<span class="glyphicon glyphicon-calendar"></span>
-									</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <script type="text/javascript">
-                                $(function () {
-                                    $('#datetimepicker1').datetimepicker();
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button id="button" class="btn btn-primary">Continue</button>
-            <script type="text/javascript">
-                document.getElementById("button").onclick = function () {
-                    location.href = "/vote";
-                };
-            </script>
-        </div>
-    </div>
-    <script type="text/javascript" src="../static/EventPreferences.js"></script>
+				<div class="date-form">
+					<h2> When </h2>
+					<div class="container">
+						<div class="row">
+							<div class='col-sm-6'>
+								<div class="form-group">
+									<div class='input-group date' id='datetimepicker1'>
+										<input id="date-input" type='text' class="form-control" />
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+							</div>
+							<script type="text/javascript">
+								$(function () {
+									$('#datetimepicker1').datetimepicker();
+								});
+							</script>
+						</div>
+					</div>
+				</div>
+
+				<div class="email-form" id="regexpEmailForm">
+					<h2> Email </h2>
+					<div class="container">
+						<table id="myTable" class="table order-list" bordercolor="white">
+							<tbody>
+								<tr>
+									<td class="col-sm-6">
+										<input id="form_email" type="email" name="email" class="form-control" required="required" data-error="Valid email is required.">
+									</td>
+									<td>
+										<input type="button" class="btn btn-success" id="addrow" value="Add"></input>
+									</td>
+									<td class="col-sm-2">
+										<a class="deleteRow"></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+			<button id="continueBtn" class="btn btn-primary">Continue</button>
+			<script type="text/javascript">
+				document.getElementById("continueBtn").onclick = function () {
+					location.href = "/vote";
+				};
+
+				$(document).ready(function () {
+					var counter = 0;
+					$("#addrow").on("click", function () {
+						var newRow = $("<tr>");
+						var cols = "";
+						cols += '<td><input type="text" class="form-control" name="name' + counter + '"/></td>';
+						cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger"  value="Delete"></td>';
+						newRow.append(cols);
+						$("table.order-list").append(newRow);
+						counter++;
+					});
+					$("table.order-list").on("click", ".ibtnDel", function (event) {
+						$(this).closest("tr").remove();
+						counter -= 1
+					});
+				});
+			</script>
+		</div>
+	</div>
+	<script type="text/javascript" src="../static/EventPreferences.js"></script>
+
 </html>

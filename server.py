@@ -1,4 +1,4 @@
-from flask import Flask, abort, request, render_template, Response, redirect, url_for
+from flask import Flask, abort, request, render_template, Response, redirect, url_for, jsonify
 import urllib.parse
 import urllib.request
 import json
@@ -36,6 +36,8 @@ def options():
     if request.method == 'GET':
         return render_template('EventPreferencesForm.html'), 200
     if request.method == 'POST':
+        # parse emails from JSON
+        emails = request.get_json()['emails']
         # parse out parameters from POST request
         event_id = request.args.get("event_id")
         location = request.args.get("location")
@@ -57,6 +59,15 @@ def options():
             votes_data = {"votes": 0}
             database.child(event_id).child("restaurants").child(restaurant["id"]).set(votes_data)
 
+        for email in emails:
+            local_part = email.split('@')[0]
+            domain = email.split('@')[1]
+            email_data = {"domain": domain}
+            database.child(event_id).child("emails").child(local_part).set(email_data)
+            for restaurant in restaurants:
+                restaurant_data = {restaurant["id"]: True}
+                database.child(event_id).child("emails").child(local_part).push(restaurant_data)
+
         # add event to Firebase
         database.child(event_id).child("location").set(location)
         database.child(event_id).child("radius").set(radius)
@@ -67,7 +78,7 @@ def options():
 
         emails= []
         send_event_id_email(event_id, emails)
-        return Response(status=200, mimetype='application/json')
+        return Response(status=200)
     abort(405)
 
 
@@ -78,6 +89,7 @@ def vote():
     if request.method == 'POST':
         # parse out parameters from POST request
         user_email = request.args.get("user_email")
+        local_part = user_email.split('@')[0]
         restaurant_id = request.args.get("restaurant_id")
         approval = request.args.get("approval")
         event_id = request.args.get("event_id")
@@ -89,13 +101,22 @@ def vote():
         else:
             vote = 0
 
-
-# remove restaurant_id from user...
+        # set vote
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
+        # remove restaurant_id from user
+
+        user_values = database.child(event_id).child("emails").child(local_part).get(user['idToken']).val()
+
+        for val in user_values:
+            if val != "domain":
+                for restaurant in val:
+                    if restaurant == restaurant_id:
+                        database.child(event_id).child("emails").child(local_part).remove(val, user['idToken'])
+
+        return Response(status=200)
 
     if request.method == 'GET':
         return render_template('votingPage.html'), 200
-        # return voting status, for every restaurant
     abort(405)
 
 
@@ -114,12 +135,34 @@ def event():
 # GET here to retrieve voting details
 @app.route('/detail/vote')
 def detail_vote():
-    # return list of resto_id, and valid
-    # return json representing votes
-    if request.method == 'GET':
-        event_id = request.args.get("event_id")
-        return json.dumps(database.child(event_id).child("restaurants").get(user['idToken']).val()), 200
-    abort(405)
+
+    #TODO grab restaurants under user_email, check if correctly returns
+
+    event_id = request.args.get("event_id")
+    user_name = request.args.get("user_email")
+    event_details = database.child(event_id).get(user['idToken']).val()
+    local_part = user_name.split('@')[0]
+
+    restaurants = event_details["restaurants"]
+    user_values = event_details["emails"][local_part]
+    # restaurants_not_voted = database.child(event_id).child("emails").child(user_email).get(user['idToken']).val()
+    # user-restaurants = database.child(event_id).child("emails").child(user_email).get(restaurant, user['idToken'])
+
+    # map for restaurants and their validity
+    choices = []
+
+    for restaurant in restaurants:
+        # if key == domain
+        for val in user_values:
+            if val != "domain":
+                for not_voted_restaurants in val:
+                    if restaurant == not_voted_restaurants:
+                        choices.append({restaurant: True})
+                    else:
+                        choices.append({restaurant: False})
+    choice = {"choices": choices}
+    # use jsonify
+    return json.dumps(choice)
 
 
 # GET here to retrieve event details
