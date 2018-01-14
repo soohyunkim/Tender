@@ -10,7 +10,7 @@ app = Flask(__name__)
 # GET here to retrieve the main landing page
 @app.route('/')
 def index():
-    abort(404)
+    return render_template('index.html')
 
 
 # GET here to retrieve an event,
