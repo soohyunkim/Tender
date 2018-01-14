@@ -31,6 +31,8 @@ def index():
 # POST here to create a new event
 @app.route('/options', methods=['GET', 'POST'])
 def options():
+    if request.method == 'GET':
+        return render_template('EventPreferencesForm.html'), 200
     if request.method == 'POST':
         # parse out parameters from POST request
         event_id = request.args.get("event_id")
@@ -88,9 +90,7 @@ def vote():
         # return render_template('TODO.html'), 200
 
     if request.method == 'GET':
-        prev_vote = database.child(event_id).child("restaurants").child(restaurant_id).child("votes").get(
-            user['idToken']).val()
-
+        return render_template('votingPage.html'), 200
         # return voting status, for every restaurant
     abort(404)
 
