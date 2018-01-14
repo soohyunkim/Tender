@@ -117,15 +117,14 @@ def detail_event():
     event_details = database.child(event_id).get(user['idToken']).val()
 
     if hasattr(event_details, "winner"):
-        return event_details["winner"]
+        return json.dumps(event_details["winner"])
     else:
         restaurants = event_details["restaurants"]
-        current_winner = {}
+        current_winner = ""
         current_winner_votes = -1
         for restaurant in restaurants:
-            if restaurant["votes"] > current_winner_votes:
+            if restaurants[restaurant]["votes"] > current_winner_votes:
                 current_winner = restaurant
-                current_winner_votes = restaurant["votes"]
+                current_winner_votes = restaurants[restaurant]["votes"]
         database.child(event_id).child("winner").set(current_winner)
-        return current_winner
-    abort(404)
+        return json.dumps(current_winner)

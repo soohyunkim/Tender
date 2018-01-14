@@ -1,0 +1,16 @@
+
+.grid { 
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 10px;
+  align-items: stretch;
+  padding: 10px 0px 10px 0px;
+}
+
+.col-sm img {
+  max-width: 80%;
+}
+
+.grid img {
+  max-width: 90%;
+}
