@@ -1,0 +1,14 @@
+
+.event-confirmed-image-container {
+	width: 40%;
+}
+
+#event-confirmed-image {
+  width: 100%;
+}
+
+.container-confirmation {
+	width: 80%;
+	margin:auto;
+	background-color: #d1d1d1;
+}

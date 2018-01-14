@@ -89,6 +89,7 @@ def vote():
     if request.method == 'POST':
         # parse out parameters from POST request
         user_email = request.args.get("user_email")
+        local_part = user_email.split('@')[0]
         restaurant_id = request.args.get("restaurant_id")
         approval = request.args.get("approval")
         event_id = request.args.get("event_id")
@@ -103,23 +104,36 @@ def vote():
         # set vote
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
         # remove restaurant_id from user
-        database.child(event_id).child("emails").child(user_email).remove(restaurant_id, user['idToken'])
+
+        user_values = database.child(event_id).child("emails").child(local_part).get(user['idToken']).val()
+
+        for val in user_values:
+            if val != "domain":
+                for restaurant in val:
+                    if restaurant == restaurant_id:
+                        database.child(event_id).child("emails").child(local_part).remove(val, user['idToken'])
+
         return Response(status=200)
 
     if request.method == 'GET':
-        return render_template('votingPage.html'), 200
+        user_email = request.args.get("user_email")
+        event_id = request.args.get("event_id")
+        return render_template('votingPage.html', event_id=event_id, user_email=user_email), 200
     abort(405)
 
 
 # GET here to retrieve event page
+# if voting is over and the event already has a winner, show ConfirmedEventPage.html
+# if voting hasn't ended yet, show votingPage.html
 @app.route('/event')
 def event():
     event_id = request.args.get("event_id")
+    email = request.args.get("email")
     event_details = database.child(event_id).get(user['idToken']).val()
     if hasattr(event_details, "winner"):
-        return render_template('ConfirmedEventPage.html')
+        return render_template('ConfirmedEventPage.html', event_id=event_id, user_email=email)
     else:
-        return render_template('votingPage.html')
+        return render_template('votingPage.html', event_id=event_id, user_email=email)
     abort(405)
 
 
@@ -132,24 +146,25 @@ def detail_vote():
     event_id = request.args.get("event_id")
     user_name = request.args.get("user_email")
     event_details = database.child(event_id).get(user['idToken']).val()
+    local_part = user_name.split('@')[0]
 
     restaurants = event_details["restaurants"]
-    restaurants_not_voted = event_details["users"][user_name]
+    user_values = event_details["emails"][local_part]
     # restaurants_not_voted = database.child(event_id).child("emails").child(user_email).get(user['idToken']).val()
     # user-restaurants = database.child(event_id).child("emails").child(user_email).get(restaurant, user['idToken'])
 
     # map for restaurants and their validity
     choices = []
 
-    i = 0
     for restaurant in restaurants:
-        if restaurant in restaurants_not_voted:
-            choices.append({restaurant: True})
-            i = i + 1
-        else:
-            choices.append({restaurant: False})
-            i = i + 1
-
+        # if key == domain
+        for val in user_values:
+            if val != "domain":
+                for not_voted_restaurants in val:
+                    if restaurant == not_voted_restaurants:
+                        choices.append({restaurant: True})
+                    else:
+                        choices.append({restaurant: False})
     choice = {"choices": choices}
     # use jsonify
     return json.dumps(choice)
@@ -163,17 +178,14 @@ def detail_event():
     event_details = database.child(event_id).get(user['idToken']).val()
 
     # if all users no longer have restaurants attached to them, voting has ended
-    users = event_details["users"]
+    users = event_details.get("users", [])
     is_voting_finished = True
     for email in users:
         if len(users[email]["restaurants"]) != 0:
             is_voting_finished = False
 
     if is_voting_finished:
-        if hasattr(event_details, "winner"):
-            # if winner has already been found, return it
-            return json.dumps(event_details["winner"])
-        else:
+        if not hasattr(event_details, "winner"):
             # if winner hasn't been found yet,
             # loop through restaurants to figure out which restaurant has the most votes,
             # update event on Firebase with winner and return it
@@ -185,7 +197,12 @@ def detail_event():
                     current_winner = restaurant
                     current_winner_votes = restaurants[restaurant]["votes"]
             database.child(event_id).child("winner").set(current_winner)
-            return json.dumps(current_winner)
+
+        # get the event_details from Firebase and return it
+        event_details = json.dumps(database.child(event_id).get(user['idToken']).val())
+        # print(event_details)
+        # json_event_details = json.loads(json.dumps({"event_id": event_details}))
+        return json.dumps("{event_id: " + event_details + "}")
     else:
         return json.dumps("voting not finished")
 
