@@ -1,6 +1,5 @@
 from flask import Flask, abort, request, render_template, redirect, url_for
 import urllib
-import urllib2
 import json
 import pyrebase
 
