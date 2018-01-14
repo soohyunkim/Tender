@@ -1,5 +1,4 @@
 from flask import Flask, abort, request, render_template, redirect, url_for
-from firebase import firebase
 import urllib
 import urllib2
 import json
