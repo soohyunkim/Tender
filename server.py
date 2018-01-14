@@ -65,8 +65,8 @@ def options():
             email_data = {"domain": domain}
             database.child(event_id).child("emails").child(local_part).set(email_data)
             for restaurant in restaurants:
-                restaurant_data = {restaurant["id"]: True}
-                database.child(event_id).child("emails").child(local_part).push(restaurant_data)
+                restaurant_data = {"valid": True}
+                database.child(event_id).child("emails").child(local_part).child(restaurant["id"]).set(restaurant_data)
 
         # add event to Firebase
         database.child(event_id).child("location").set(location)
@@ -104,14 +104,7 @@ def vote():
         # set vote
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
         # remove restaurant_id from user
-
-        user_values = database.child(event_id).child("emails").child(local_part).get(user['idToken']).val()
-
-        for val in user_values:
-            if val != "domain":
-                for restaurant in val:
-                    if restaurant == restaurant_id:
-                        database.child(event_id).child("emails").child(local_part).remove(val, user['idToken'])
+        database.child(event_id).child("emails").child(local_part).child(restaurant_id).remove(user['idToken'])
 
         return Response(status=200)
 
@@ -141,30 +134,28 @@ def event():
 @app.route('/detail/vote')
 def detail_vote():
 
-    #TODO grab restaurants under user_email, check if correctly returns
-
     event_id = request.args.get("event_id")
     user_name = request.args.get("user_email")
-    event_details = database.child(event_id).get(user['idToken']).val()
+    event_details = database.child(event_id).get(user['idToken'])
     local_part = user_name.split('@')[0]
 
-    restaurants = event_details["restaurants"]
-    user_values = event_details["emails"][local_part]
-    # restaurants_not_voted = database.child(event_id).child("emails").child(user_email).get(user['idToken']).val()
-    # user-restaurants = database.child(event_id).child("emails").child(user_email).get(restaurant, user['idToken'])
+    restaurants = database.child(event_id).child("restaurants").get(user['idToken'])
+    user_restaurants = database.child(event_id).child("emails").child(local_part).get(user['idToken'])
 
     # map for restaurants and their validity
     choices = []
 
-    for restaurant in restaurants:
-        # if key == domain
-        for val in user_values:
-            if val != "domain":
-                for not_voted_restaurants in val:
-                    if restaurant == not_voted_restaurants:
-                        choices.append({restaurant: True})
-                    else:
-                        choices.append({restaurant: False})
+    for restaurant in restaurants.each():
+        valid = False
+        for user_restaurant in user_restaurants.each():
+            if restaurant.key() == user_restaurant.key():
+                valid = True
+        if valid:
+            choices.append({restaurant.key(): True})
+        else:
+            choices.append({restaurant.key(): False})
+
+
     choice = {"choices": choices}
     # use jsonify
     return json.dumps(choice)
