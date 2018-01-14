@@ -2,7 +2,6 @@ $( document ).ready(function() {
 	console.log("js file is working");
 });
 
-
 $("#button").click(function() {
 	console.log("continue click working");
 	var category = null;
@@ -16,27 +15,75 @@ $("#button").click(function() {
 		category = "desserts";
 	}	
 
-	var kmDistance = 0;
+	var mDistance = 0;
 	if ($("#one-km-button").is(':checked')) {
-		kmDistance = 1;
+		mDistance = 1000;
 	} else if ($("#two-km-button").is(':checked')) {
-		kmDistance = 2;
+		mDistance = 2000;
 	} else if ($("#five-km-button").is(':checked')) {
-		kmDistance = 5;
+		mDistance = 5000;
 	} else if ($("#ten-km-button").is(':checked')) {
-		kmDistance = 10;
+		mDistance = 10000;
 	} else if ($("#thirty-km-button").is(':checked')) {
-		kmDistance = 30;
+		mDistance = 30000;
 	}
 
 	var priceOne = $("#price-one-button").is(':checked');
 	var priceTwo = $("#price-two-button").is(':checked');
 	var priceThree = $("#price-three-button").is(':checked');
 	var priceFour = $("#price-four-button").is(':checked');
-	var priceFive = $("#price-five-button").is(':checked');
 
-	var postObj = {"category": category, "distance": kmDistance, "priceOne": priceOne, "priceTwo": priceTwo, "priceThree": priceThree, "priceFour": priceFour, "priceFive": priceFive};
+	var dateAndTime = Date.parse($("#date-input").val())/1000;
 
-	console.log(postObj);
+	var priceString = "";
+	if (priceOne) {
+		priceString += "1";
+	}
+	if (priceTwo) {
+		if (priceString.length > 0) {
+			priceString += ",";
+		}
+		priceString += "2";
+	}
+	if (priceThree) {
+		if (priceString.length > 0) {
+			priceString += ",";
+		}
+		priceString += "3";
+	}
+	if (priceFour) {
+		if (priceString.length > 0) {
+			priceString += ",";
+		}
+		priceString += "4";
+	}
+
+	var params =
+		"event_id=" + generateEventId() +
+		"&categories=" + category +
+		"&radius=" + mDistance +
+		"&location=" + "UBC%2C+Vancouver%2C+British+Columbia" +
+		"&limit=" + 15 +
+		"&open_at=" + dateAndTime;
+	if (priceString.length > 0) {
+		params += "&price=" + priceString;
+	}
+
+	var http = new XMLHttpRequest();
+	var url = "http://127.0.0.1:5000/options?"+ params;
+	http.open("POST", url, false);
+	http.send();
+
+	console.log(params);
 	//post with post object here
 });
+
+function generateEventId() {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+}
