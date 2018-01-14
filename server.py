@@ -36,6 +36,8 @@ def options():
     if request.method == 'GET':
         return render_template('EventPreferencesForm.html'), 200
     if request.method == 'POST':
+        # parse emails from JSON
+        emails = request.get_json()['emails']
         # parse out parameters from POST request
         event_id = request.args.get("event_id")
         location = request.args.get("location")
@@ -56,6 +58,15 @@ def options():
         for restaurant in restaurants:
             votes_data = {"votes": 0}
             database.child(event_id).child("restaurants").child(restaurant["id"]).set(votes_data)
+
+        for email in emails:
+            local_part = email.split('@')[0]
+            domain = email.split('@')[1]
+            email_data = {"domain": domain}
+            database.child(event_id).child("emails").child(local_part).set(email_data)
+            for restaurant in restaurants:
+                restaurant_data = {restaurant["id"]: True}
+                database.child(event_id).child("emails").child(local_part).push(restaurant_data)
 
         # add event to Firebase
         database.child(event_id).child("location").set(location)
