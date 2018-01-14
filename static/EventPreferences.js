@@ -42,25 +42,25 @@ $("#button").click(function() {
 	}
 	if (priceTwo) {
 		if (priceString.length > 0) {
-			priceString += ", ";
+			priceString += ",";
 		}
 		priceString += "2";
 	}
 	if (priceThree) {
 		if (priceString.length > 0) {
-			priceString += ", ";
+			priceString += ",";
 		}
 		priceString += "3";
 	}
 	if (priceFour) {
 		if (priceString.length > 0) {
-			priceString += ", ";
+			priceString += ",";
 		}
 		priceString += "4";
 	}
 
 	var params =
-		"event_id" + 123 +
+		"event_id=" + generateUUID() +
 		"&categories=" + category +
 		"&radius=" + mDistance +
 		"&location=" + "UBC%2C+Vancouver%2C+British+Columbia" +
@@ -78,3 +78,13 @@ $("#button").click(function() {
 	console.log(params);
 	//post with post object here
 });
+
+function generateUUID() {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+}
