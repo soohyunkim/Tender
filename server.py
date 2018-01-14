@@ -160,19 +160,19 @@ def vote():
 # show votingPage.html
 @app.route('/event')
 def event():
-    event_id = request.args.get("event_id")
-    email = request.args.get("email")
+    event_id = "12345"
+    email = "kyle.swensson@gmail.com"
     event_details = database.\
         child(event_id).\
         get(user['idToken']).val()
-    if hasattr(event_details, "winner"):
-        return render_template('ConfirmedEventPage.html',
-                               event_id=event_id,
-                               user_email=email)
-    else:
-        return render_template('votingPage.html',
-                               event_id=event_id,
-                               user_email=email)
+#    if hasattr(event_details, "winner"):
+    return render_template('ConfirmedEventPage.html',
+                            event_id=event_id,
+                            user_email=email)
+#    else:
+#        return render_template('votingPage.html',
+#                               event_id=event_id,
+#                               user_email=email)
     abort(405)
 
 

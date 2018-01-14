@@ -2,7 +2,9 @@ $( document ).ready(function() {
 	console.log("js file is working");
 	
 	//get thing from firebase here
-	var WinningEventJson = httpGet("http://127.0.0.1:5000/detail/event");
+	var event_id = $("#event_id").text();
+	console.log(event_id);
+	var WinningEventJson = httpGet("http://127.0.0.1:5000/detail/event?event_id=" + event_id);
 	
 	console.log(winningEventJson);
 	
@@ -14,8 +16,8 @@ $( document ).ready(function() {
 
 function httpGet(theUrl)
 {
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", url, false);
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("GET", theUrl, false);
     xmlHttp.send( null );
     return JSON.parse(xmlHttp.responseText);
 }
