@@ -63,7 +63,7 @@ def vote():
 
 
 # GET here to retrieve event page
-@app.route('event')
+@app.route('/event')
 def event():
     abort(404)
 
