@@ -48,10 +48,10 @@ def options():
         open_at = request.args.get("open_at")
 
         params = urllib.parse.urlencode({'location': location, 'radius': radius, 'categories': categories, 'limit': limit, 'price': price, 'open_at': open_at})
-
         # make GET request to Yelp API using parameters
         url = urllib.request.Request("https://api.yelp.com/v3/businesses/search?%s" % params)
         url.add_header('Authorization', 'Bearer hJ9D0lMCziUpj-OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-Fegf_rJOLQ_eN1zebXB-3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_9CTWsLhPDy9a6JaWnYx')
+        print(urllib.request.urlopen(url).read())
         json_response = json.loads(urllib.request.urlopen(url).read())
 
         restaurants = json_response["businesses"]
@@ -76,7 +76,6 @@ def options():
         database.child(event_id).child("price").set(price)
         database.child(event_id).child("open_at").set(open_at)
 
-        emails= []
         send_event_id_email(event_id, emails)
         return Response(status=200)
     abort(405)
