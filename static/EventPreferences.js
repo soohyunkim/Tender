@@ -4,7 +4,19 @@ $( document ).ready(function() {
 });
 
 
-$(#continueButton).click(function() {
+$("#continue-button").click(function() {
+	console.log("continue click working");
+	var category = null;
+	if ($("#restaurants-button").val()) {
+		category = "restaurants";
+	} else if ($("#bars-button").val()) {
+		category = "bars";
+	} else if ($("#cafes-button").val()) {
+		category = "cafes";
+	} else if ($("desserts-button").val()) {
+		category = "desserts";
+	}	
+
 	var kmDistance = 0;
 	if ($("#one-km-button").val()) {
 		kmDistance = 1;
@@ -24,6 +36,8 @@ $(#continueButton).click(function() {
 	var priceFour = $("#price-four-button").val();
 	var priceFive = $("#price-five-button").val();
 
-	var postObj = {distance: kmDistance};
+	var postObj = {"category": category, "distance": kmDistance, "priceOne": priceOne, "priceTwo": priceTwo, "priceThree": priceThree, "priceFour": priceFour, "priceFive": priceFive};
+
+	console.log(postObj);
 	//post with post object here
-}
+});

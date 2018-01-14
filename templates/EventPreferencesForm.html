@@ -2,8 +2,8 @@
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">	
 	<link rel="stylesheet" type="text/css" href="../static/EventPreferences.css">
-	<script type="text/javascript" src="../static/EventPreferences.js"></script>
 	<script type="text/javascript" src="../static/jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="../static/EventPreferences.js"></script>
 	<script type="text/javascript" src="../static/moment.min.js"></script>
 	<script type="text/javascript" src="../static/bootstrap/js/transition.js"></script>
 	<script type="text/javascript" src="../static/bootstrap/js/collapse.js"></script>
@@ -20,13 +20,16 @@
 	<h2> Event Type </h2>
 	<div class="row">
 	<div class="radio col-sm">
- 		<label><input type="radio" name="event-type-radio">Dinner</label>
+ 		<label><input id="restaurants-button" type="radio" name="event-type-radio">Restaurants</label>
 	</div>
 	<div class="radio col-sm">
-		<label><input type="radio" name="event-type-radio">Drinks</label>
+		<label><input id="bars-button" type="radio" name="event-type-radio">Bars</label>
 	</div>
 	<div class="radio col-sm">
-		<label><input type="radio" name="event-type-radio">Coffee</label>
+		<label><input id="cafes-button" type="radio" name="event-type-radio">Cafes</label>
+	</div>
+	<vid class="radio col-sm">
+		<label><input id="desserts-button" type="radio" name="event-type-radio">Desserts</label>
 	</div>
 </div>
 
@@ -88,7 +91,7 @@
 </div>
 
 
-<button type="button" class="btn btn-primary"> Continue </button>
+<button id="continue-button" type="button" class="btn btn-primary"> Continue </button>
 
 </div>
 
