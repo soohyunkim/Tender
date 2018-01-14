@@ -3,9 +3,23 @@ from firebase import firebase
 import urllib
 import urllib2
 import json
+import pyrebase
 
 app = Flask(__name__)
 
+config = {
+  "apiKey": "AIzaSyCuqbzhR4xHDP1L5sun9JZe57Jpndu72j8",
+  "authDomain": "weeatruffles.firebaseapp.com",
+  "databaseURL": "https://weeatruffles.firebaseio.com",
+  "storageBucket": "weeatruffles.appspot.com",
+  "serviceAccount": "static/WeEatRuffles-bfa3023c5afe.json"
+}
+
+firebase = pyrebase.initialize_app(config)
+
+auth = firebase.auth()
+# authenticate a user
+user = auth.sign_in_with_email_and_password("user@user.com", "useruser")
 
 # GET here to retrieve the main landing page
 @app.route('/')
