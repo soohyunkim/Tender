@@ -4,6 +4,7 @@ import urllib.request
 import json
 import pyrebase
 import smtplib
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 
@@ -97,9 +98,16 @@ def vote():
         # return voting status, for every restaurant
     abort(405)
 
+
 # GET here to retrieve event page
 @app.route('/event')
 def event():
+    event_id = request.args.get("event_id")
+    event_details = database.child(event_id).get(user['idToken']).val()
+    if hasattr(event_details, "winner"):
+        return render_template('ConfirmedEventPage.html')
+    else:
+        return render_template('votingPage.html')
     abort(405)
 
 
@@ -149,13 +157,15 @@ def detail_event():
         return json.dumps("voting not finished")
 
 
+# send an email that looks like http://127.0.0.1:5000/event?event_id=123456&email=example@gmail.com
 def send_event_id_email(event_id, emails):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login("weeatruffles1@gmail.com", "weeatruffles2")
 
-    event_id_msg = event_id
-    server.sendmail("weeattruffles1@gmail.com", "frostyyshadows@gmail.com", event_id_msg)
+    # server.sendmail("weeattruffles1@gmail.com", "frostyyshadows@gmail.com", event_id_msg_link.as_string())
     for email in emails:
-        server.sendmail("weeattruffles1@gmail.com", email, event_id_msg)
+        event_id_msg = "http://127.0.0.1:5000" + "/event?" + "event_id=" + event_id + "&email=" + email
+        event_id_msg_link = MIMEText(u'<a href=' + event_id_msg + '>You\'ve been invited to an event!</a>', 'html')
+        server.sendmail("weeattruffles1@gmail.com", email, event_id_msg_link.as_string())
     server.quit()
