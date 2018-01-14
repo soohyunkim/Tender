@@ -1,10 +1,10 @@
-# WeEatRuffles
+# Tender
 
-*Note: WeEatRuffles won't be the final name.*
+Tinder for Food.
 
 A simple web app that helps you and your friends plan an event by voting on nearby restaurants.
 
-## WeEatRuffles Backend
+## Tender Backend
 
 * Install [Flask](http://flask.pocoo.org): `pip install flask`
 * Install [Pyrebase](https://github.com/thisbejim/Pyrebase): `pip install pyrebase`
