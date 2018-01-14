@@ -1,4 +1,4 @@
-from flask import Flask, abort, request, render_template, Response
+from flask import Flask, abort, request, render_template, Response, jsonify
 import urllib.parse
 import urllib.request
 import json
@@ -245,11 +245,14 @@ def detail_event():
                     current_winner_votes = restaurants[restaurant]["votes"]
             database.child(event_id).child("winner").set(current_winner)
 
-        # get the event_details from Firebase and return it
-        event_details = json.dumps(database.
-                                   child(event_id).get(user['idToken']).
-                                   val())
-        return json.dumps("{event_id: " + event_details + "}")
+        restaurant_id = database.child(event_id).child("winner").val()
+        # make GET request to Yelp API
+        url = urllib.request.Request(
+            "https://api.yelp.com/v3/businesses/%s" % restaurant_id)
+        url.add_header('Authorization',
+                       'Bearer hJ9D0lMCziUpj-OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-Fegf_rJOLQ_eN1zebXB-3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_9CTWsLhPDy9a6JaWnYx')
+
+        return jsonify(json.loads(urllib.request.urlopen(url).read()))
     else:
         return json.dumps("voting not finished")
 
