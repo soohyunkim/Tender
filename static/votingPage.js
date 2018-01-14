@@ -23,7 +23,14 @@ function populate_page(event_id, event_details) {
 }
 
 $("#button").click(function () {
+    var http = new XMLHttpRequest();
+    var url = "http://127.0.0.1:5000/event?" + params;
+    http.open("GET", url, false);
+    http.setRequestHeader('Content-Type', 'application/json');
+    http.send(JSON.stringify({emails: emails}));
 
+    console.log(params);
+    //post with post object here
 });
 
 function submit_vote(user_email, restaurant_id, approval, event_id) {
