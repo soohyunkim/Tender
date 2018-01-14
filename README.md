@@ -22,6 +22,41 @@ GET to retrieve the main landing page.
 GET to retrieve the event options page.
 POST to create new event.
 
+POST format in JSON:
+```JSON
+{
+    "event_name": ...,
+    "event_type": ...,
+    "date": ...,
+    "location": {
+        "lat": ...,
+        "lon": ...
+    },
+    "price": {
+        "1": ...,
+        "2": ...,
+        "3": ...,
+        "4": ...,
+        "5": ...
+    },
+    "max_distance": ...,
+    "emails": [
+        ...
+    ]
+}
+```
+`event_name` is the user-input name of the event,
+`event_type` is a string representing what type of event it is (with the possible values below),
+`date` is user-input time and date of the event in Unix epoch time,
+`location` is the latitude and longitude of the desired search location,
+`price` contains whether certain price levels are desired (true for desired, false for undesired),
+where `1` is the cheapest price level and `5` is the most expensive price level,
+`max_distance` is the maximum search distance away from `location`,
+and `emails` is a list of the invitees' emails.
+
+Possible values for `event_type`:
+* TODO
+
 ### `/vote`
 
 GET to retrieve voting page.
@@ -34,6 +69,7 @@ GET to retrieve event page.
 
 GET to retrieve voting details.
 POST to submit an individual vote.
+
 POST format in JSON:
 ```JSON
 {
