@@ -62,6 +62,22 @@ def options():
 # POST here to submit votes
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
+    if request.method == 'POST':
+        # parse out parameters from POST request
+        user_email = request.args.get("user_email")
+        restaurant_id = request.args.get("restaurant_id")
+        approval = request.args.get("approval")
+        event_id = request.args.get("event_id")
+
+        prev_vote = database.child(event_id).child("restaurants").child(restaurant_id).child("votes").get(user['idToken']).val()
+        prev_vote = 0 if prev_vote is None else prev_vote
+        vote = 1 if approval else 0
+        database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
+        # return json representing votes
+        # return render_template('TODO.html'), 200
+
+    if request.method == 'GET':
+        return render_template('vote.html'), 200
     abort(404)
 
 
@@ -77,6 +93,8 @@ def event():
 # GET here to retrieve voting details
 @app.route('/detail/vote')
 def detail_vote():
+
+    # return list of resto they can vote on
     abort(404)
 
 # GET here to retrieve event details
