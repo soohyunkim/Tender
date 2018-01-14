@@ -87,7 +87,6 @@ GET format in JSON:
 `choices` is a list containing
 `restaurant_id`, the Yelp ID of the restaurant to vote for,
 and `valid`, whether the user can vote on this restaurant.
-      
 
 POST format in JSON:
 ```JSON
