@@ -49,9 +49,19 @@ def options():
         json_response = json.loads(urllib.request.urlopen(url).read())
 
         restaurants = json_response["businesses"]
-        # add restaurants to Firebase, indexed by id
+        restaurant_ids = []
         for restaurant in restaurants:
-            database.child(event_id).child("restaurants").child(restaurant["id"]).set(restaurant)
+            restaurant_ids.append(restaurant["id"])
+
+        # add event to Firebase
+        database.child(event_id).child("restaurants").set(restaurant_ids)
+        database.child(event_id).child("location").set(location)
+        database.child(event_id).child("radius").set(radius)
+        database.child(event_id).child("categories").set(categories)
+        database.child(event_id).child("limit").set(limit)
+        database.child(event_id).child("price").set(price)
+        database.child(event_id).child("open_at").set(open_at)
+
         # returns json representing restaurants
         #return render_template('TODO.html'), 200
         abort(404)
@@ -68,18 +78,34 @@ def vote():
 # GET here to retrieve event page
 @app.route('/event')
 def event():
-    if request.method == 'GET':
-        event_id = request.args.get("event_id")
-        return database.child(event_id).child("restaurants").get(user['idToken']).val(), 200
     abort(404)
 
 
 # GET here to retrieve voting details
 @app.route('/detail/vote')
 def detail_vote():
+    if request.method == 'GET':
+        event_id = request.args.get("event_id")
+        return database.child(event_id).child("restaurants").get(user['idToken']).val(), 200
     abort(404)
 
 # GET here to retrieve event details
+# after voting ends, go through restaurants, return restaurant with most votes
 @app.route('/detail/event')
 def detail_event():
+    event_id = request.args.get("event_id")
+    event_details = database.child(event_id).get(user['idToken']).val()
+
+    if hasattr(event_details, "winner"):
+        return event_details["winner"]
+    else:
+        restaurants = event_details["restaurants"]
+        current_winner = {}
+        current_winner_votes = -1
+        for restaurant in restaurants:
+            if restaurant["votes"] > current_winner_votes:
+                current_winner = restaurant
+                current_winner_votes = restaurant["votes"]
+        database.child(event_id).child("winner").set(current_winner)
+        return current_winner
     abort(404)
