@@ -64,7 +64,7 @@ def vote():
 
 
 # GET here to retrieve event page
-@app.route('event')
+@app.route('/event')
 def event():
     if request.method == 'GET':
         event_id = request.args.get("event_id")
