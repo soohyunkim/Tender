@@ -107,27 +107,20 @@
 				<div class="email-form" id="regexpEmailForm">
 					<h2> Email </h2>
 					<div class="container">
-						<table id="myTable" class="table order-list">
+						<table id="myTable" class="table order-list" bordercolor="white">
 							<tbody>
 								<tr>
 									<td class="col-sm-6">
 										<input id="form_email" type="email" name="email" class="form-control" required="required" data-error="Valid email is required.">
 									</td>
+									<td>
+										<input type="button" class="btn btn-success" id="addrow" value="Add"></input>
+									</td>
 									<td class="col-sm-2">
 										<a class="deleteRow"></a>
-
 									</td>
 								</tr>
 							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="2" style="text-align: left;">
-										<input type="button" class="btn btn-md btn-block" id="addrow" value="Add Row" />
-									</td>
-								</tr>
-								<tr>
-								</tr>
-							</tfoot>
 						</table>
 					</div>
 				</div>
@@ -145,7 +138,7 @@
 						var newRow = $("<tr>");
 						var cols = "";
 						cols += '<td><input type="text" class="form-control" name="name' + counter + '"/></td>';
-						cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+						cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger"  value="Delete"></td>';
 						newRow.append(cols);
 						$("table.order-list").append(newRow);
 						counter++;
