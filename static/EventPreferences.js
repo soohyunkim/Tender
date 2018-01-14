@@ -1,40 +1,39 @@
 $( document ).ready(function() {
-	console.log("about js working");
-	$("#aboutProfileImg").hide();
+	console.log("js file is working");
 });
 
 
-$("#continue-button").click(function() {
+$("#button").click(function() {
 	console.log("continue click working");
 	var category = null;
-	if ($("#restaurants-button").val()) {
+	if ($("#restaurants-button").is(':checked')) {
 		category = "restaurants";
-	} else if ($("#bars-button").val()) {
+	} else if ($("#bars-button").is(':checked')) {
 		category = "bars";
-	} else if ($("#cafes-button").val()) {
+	} else if ($("#cafes-button").is(':checked')) {
 		category = "cafes";
-	} else if ($("desserts-button").val()) {
+	} else if ($("desserts-button").is(':checked')) {
 		category = "desserts";
 	}	
 
 	var kmDistance = 0;
-	if ($("#one-km-button").val()) {
+	if ($("#one-km-button").is(':checked')) {
 		kmDistance = 1;
-	} else if ($("#two-km-button").val()) {
+	} else if ($("#two-km-button").is(':checked')) {
 		kmDistance = 2;
-	} else if ($("#five-km-button").val()) {
+	} else if ($("#five-km-button").is(':checked')) {
 		kmDistance = 5;
-	} else if ($("#ten-km-button").val()) {
+	} else if ($("#ten-km-button").is(':checked')) {
 		kmDistance = 10;
-	} else if ($("#thirty-km-button").val()) {
+	} else if ($("#thirty-km-button").is(':checked')) {
 		kmDistance = 30;
 	}
 
-	var priceOne = $("#price-one-button").val();
-	var priceTwo = $("#price-two-button").val();
-	var priceThree = $("#price-three-button").val();
-	var priceFour = $("#price-four-button").val();
-	var priceFive = $("#price-five-button").val();
+	var priceOne = $("#price-one-button").is(':checked');
+	var priceTwo = $("#price-two-button").is(':checked');
+	var priceThree = $("#price-three-button").is(':checked');
+	var priceFour = $("#price-four-button").is(':checked');
+	var priceFive = $("#price-five-button").is(':checked');
 
 	var postObj = {"category": category, "distance": kmDistance, "priceOne": priceOne, "priceTwo": priceTwo, "priceThree": priceThree, "priceFour": priceFour, "priceFive": priceFive};
 
