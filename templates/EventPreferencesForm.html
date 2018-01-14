@@ -19,7 +19,16 @@
 		<h1> Event Details </h1>
 
 		<div class="event-type-form">
-			<h2> Event Type </h2>
+			<div class="email-form" id="regexpEmailForm">
+				<h4> Enter your email. </h4>
+				<div class="container">
+					<div class="col-sm-5">
+						<input id="form_email" type="email" name="email" class="form-control" required="required" data-error="Valid email is required." placeholder="abc@weeatruffles.com">
+					</div>
+				</div>
+			</div>
+
+			<h4> Event Type </h4>
 			<form>
 				<div class="row">
 					<div class="radio col-sm">
@@ -42,7 +51,7 @@
 			</form>
 
 			<div class="price-form">
-				<h2> Price </h2>
+				<h4> Price </h4>
 				<div class="row">
 					<label class="checkbox-inline col-sm">
 						<input id="price-one-button" type="checkbox" value="">$</label>
@@ -55,7 +64,7 @@
 				</div>
 			</div>
 			<div class="distance-form">
-				<h2> Distance </h2>
+				<h4> Distance </h4>
 				<form>
 					<div class="row">
 						<div class="radio col-sm">
@@ -82,10 +91,10 @@
 				</form>
 
 				<div class="date-form">
-					<h2> When </h2>
+					<h4> When </h4>
 					<div class="container">
 						<div class="row">
-							<div class='col-sm-6'>
+							<div class='col-sm-5'>
 								<div class="form-group">
 									<div class='input-group date' id='datetimepicker1'>
 										<input id="date-input" type='text' class="form-control" />
@@ -105,13 +114,13 @@
 				</div>
 
 				<div class="email-form" id="regexpEmailForm">
-					<h2> Email </h2>
+					<h4> Invite your friends now! </h4>
 					<div class="container">
 						<table id="myTable" class="table order-list" bordercolor="white">
 							<tbody>
 								<tr>
-									<td class="col-sm-6">
-										<input id="form_email" type="email" name="email" class="form-control" required="required" data-error="Valid email is required.">
+									<td class="col-sm-8">
+										<input id="form_email" type="email" name="email" class="form-control" required="required" data-error="Valid email is required." placeholder="abc@weeatruffles.com">
 									</td>
 									<td>
 										<input type="button" class="btn btn-success" id="addrow" value="Add"></input>
