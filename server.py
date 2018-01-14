@@ -1,4 +1,4 @@
-from flask import Flask, abort, request, render_template, redirect, url_for
+from flask import Flask, abort, request, render_template, Response, redirect, url_for
 import urllib.parse
 import urllib.request
 import json
@@ -31,6 +31,8 @@ def index():
 # POST here to create a new event
 @app.route('/options', methods=['GET', 'POST'])
 def options():
+    if request.method == 'GET':
+        return render_template('EventPreferencesForm.html'), 200
     if request.method == 'POST':
         # parse out parameters from POST request
         event_id = request.args.get("event_id")
@@ -61,10 +63,8 @@ def options():
         database.child(event_id).child("price").set(price)
         database.child(event_id).child("open_at").set(open_at)
 
-        # returns json representing restaurants
-        #return render_template('TODO.html'), 200
-        abort(404)
-    abort(404)
+        return Response(status=200, mimetype='application/json')
+    abort(405)
 
 
 # GET here to retrieve voting page,
@@ -85,27 +85,30 @@ def vote():
         else:
             vote = 0
 
+
+# remove restaurant_id from user...
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
 
     if request.method == 'GET':
-        return render_template('TODO.html')
-    abort(404)
+        return render_template('votingPage.html'), 200
+        # return voting status, for every restaurant
+    abort(405)
 
 # GET here to retrieve event page
 @app.route('/event')
 def event():
-    abort(404)
+    abort(405)
 
 
 # GET here to retrieve voting details
 @app.route('/detail/vote')
 def detail_vote():
-    # return list of resto they can vote on
+    # return list of resto_id, and valid
     # return json representing votes
     if request.method == 'GET':
         event_id = request.args.get("event_id")
         return database.child(event_id).child("restaurants").get(user['idToken']).val(), 200
-    abort(404)
+    abort(405)
 
 
 # GET here to retrieve event details
@@ -115,15 +118,29 @@ def detail_event():
     event_id = request.args.get("event_id")
     event_details = database.child(event_id).get(user['idToken']).val()
 
-    if hasattr(event_details, "winner"):
-        return json.dumps(event_details["winner"])
+    # if all users no longer have restaurants attached to them, voting has ended
+    users = event_details["users"]
+    is_voting_finished = True
+    for email in users:
+        if len(users[email]["restaurants"]) != 0:
+            is_voting_finished = False
+
+    if is_voting_finished:
+        if hasattr(event_details, "winner"):
+            # if winner has already been found, return it
+            return json.dumps(event_details["winner"])
+        else:
+            # if winner hasn't been found yet,
+            # loop through restaurants to figure out which restaurant has the most votes,
+            # update event on Firebase with winner and return it
+            restaurants = event_details["restaurants"]
+            current_winner = ""
+            current_winner_votes = -1
+            for restaurant in restaurants:
+                if restaurants[restaurant]["votes"] > current_winner_votes:
+                    current_winner = restaurant
+                    current_winner_votes = restaurants[restaurant]["votes"]
+            database.child(event_id).child("winner").set(current_winner)
+            return json.dumps(current_winner)
     else:
-        restaurants = event_details["restaurants"]
-        current_winner = ""
-        current_winner_votes = -1
-        for restaurant in restaurants:
-            if restaurants[restaurant]["votes"] > current_winner_votes:
-                current_winner = restaurant
-                current_winner_votes = restaurants[restaurant]["votes"]
-        database.child(event_id).child("winner").set(current_winner)
-        return json.dumps(current_winner)
+        return json.dumps("voting not finished")

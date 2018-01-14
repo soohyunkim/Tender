@@ -62,6 +62,19 @@ Possible values for `event_type`:
 ### `/vote`
 
 GET to retrieve voting page.
+POST to submit an individual vote.
+
+POST format in JSON:
+```JSON
+{
+    "restaurant_id": ...,
+    "approval": ...,
+    "user_email": ...
+}
+```
+`restaurant_id` is the restaurant's ID from Yelp,
+`approval` is whether the user approves of the restaurant,
+and `user_email` is the user's email.
 
 ### `/event`
 
@@ -70,7 +83,6 @@ GET to retrieve event page.
 ### `/detail/vote`
 
 GET to retrieve voting details.
-POST to submit an individual vote.
 
 GET format in JSON:
 ```JSON
@@ -87,19 +99,6 @@ GET format in JSON:
 `choices` is a list containing
 `restaurant_id`, the Yelp ID of the restaurant to vote for,
 and `valid`, whether the user can vote on this restaurant.
-      
-
-POST format in JSON:
-```JSON
-{
-    "restaurant_id": ...,
-    "approval": ...,
-    "user_email": ...
-}
-```
-`restaurant_id` is the restaurant's ID from Yelp,
-`approval` is whether the user approves of the restaurant,
-and `user_email` is the user's email.
 
 ### `/detail/event`
 
