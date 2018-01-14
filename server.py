@@ -269,7 +269,7 @@ def detail_event():
 
         return jsonify(json.loads(urllib.request.urlopen(url).read()))
     else:
-        return json.dumps("voting not finished")
+        return jsonify({"Error": "Voting not finished"})
 
 
 # send an email that looks like:
