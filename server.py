@@ -1,5 +1,6 @@
 from flask import Flask, abort, request, render_template, redirect, url_for
-import urllib
+import urllib.parse
+import urllib.request
 import json
 import pyrebase
 
@@ -40,16 +41,17 @@ def options():
         price = request.args.get("price")
         open_at = request.args.get("open_at")
 
-        params = urllib.request.urlencode({'location': location, 'radius': radius, 'categories': categories, 'limit': limit, 'price': price, 'open_at': open_at})
+        params = urllib.parse.urlencode({'location': location, 'radius': radius, 'categories': categories, 'limit': limit, 'price': price, 'open_at': open_at})
 
         # make GET request to Yelp API using parameters
-        url = urllib.Request("https://api.yelp.com/v3/businesses/search?%s" % params)
+        url = urllib.request.Request("https://api.yelp.com/v3/businesses/search?%s" % params)
         url.add_header('Authorization', 'Bearer hJ9D0lMCziUpj-OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-Fegf_rJOLQ_eN1zebXB-3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_9CTWsLhPDy9a6JaWnYx')
-        json_response = json.loads(urllib.urlopen(url).read())
+        json_response = json.loads(urllib.request.urlopen(url).read())
 
         restaurants = json_response["businesses"]
-        # add restaurants to Firebase
-        database.child(event_id).child("restaurants").set(restaurants)
+        # add restaurants to Firebase, indexed by id
+        for restaurant in restaurants:
+            database.child(event_id).child("restaurants").child(restaurant["id"]).set(restaurant)
         # returns json representing restaurants
         #return render_template('TODO.html'), 200
         abort(404)
