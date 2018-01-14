@@ -33,6 +33,18 @@ GET to retrieve event page.
 ### `/detail/vote`
 
 GET to retrieve voting details.
+POST to submit an individual vote.
+POST format in JSON:
+```JSON
+{
+    "restaurant_id": ...,
+    "approval": ...,
+    "user_email": ...
+}
+```
+`restaurant_id` is the restaurant's ID from Yelp,
+`approval` is whether the user approves of the restaurant,
+and `user_email` is the user's email.
 
 ### `/detail/event`
 
