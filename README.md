@@ -8,7 +8,7 @@ A simple web app that helps you and your friends plan an event by voting on near
 
 ### To use:
 
-* `cd backEnd/`
 * Install [Flask](http://flask.pocoo.org): `pip install flask`
+* Install [Pyrebase](https://github.com/thisbejim/Pyrebase): `pip install pyrebase`
 * Set env variable: `export FLASK_APP=server.py`
 * `flask run`
