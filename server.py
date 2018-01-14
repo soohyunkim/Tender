@@ -8,7 +8,7 @@ from email.mime.text import MIMEText
 
 app = Flask(__name__)
 
-config = {
+firebase_config = {
     "apiKey": "AIzaSyCuqbzhR4xHDP1L5sun9JZe57Jpndu72j8",
     "authDomain": "weeatruffles.firebaseapp.com",
     "databaseURL": "https://weeatruffles.firebaseio.com",
@@ -16,7 +16,16 @@ config = {
     "serviceAccount": "static/WeEatRuffles-bfa3023c5afe.json"
 }
 
-firebase = pyrebase.initialize_app(config)
+yelp_bearer_token = 'hJ9D0lMCziUpj-' \
+                    'OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-' \
+                    'Fegf_' \
+                    'rJOLQ_' \
+                    'eN1zebXB-' \
+                    '3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_' \
+                    '9CTWsLhPDy9a6JaWnYx'
+
+
+firebase = pyrebase.initialize_app(firebase_config)
 database = firebase.database()
 
 auth = firebase.auth()
@@ -59,23 +68,36 @@ def options():
         url = urllib.request.Request(
             "https://api.yelp.com/v3/businesses/search?%s" % params)
         url.add_header('Authorization',
-                       'Bearer hJ9D0lMCziUpj-OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-Fegf_rJOLQ_eN1zebXB-3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_9CTWsLhPDy9a6JaWnYx')
+                       'Bearer %s' % yelp_bearer_token)
         json_response = json.loads(urllib.request.urlopen(url).read())
 
         restaurants = json_response["businesses"]
         for restaurant in restaurants:
             votes_data = {"votes": 0}
-            database.child(event_id).child("restaurants").child(restaurant["id"]).set(votes_data)
+            database.\
+                child(event_id).\
+                child("restaurants").\
+                child(restaurant["id"]).\
+                set(votes_data)
 
         for email in emails:
             if '@' in email:
                 local_part = email.split('@')[0]
                 domain = email.split('@')[1]
                 email_data = {"domain": domain}
-                database.child(event_id).child("emails").child(local_part).set(email_data)
+                database.\
+                    child(event_id).\
+                    child("emails").\
+                    child(local_part).\
+                    set(email_data)
                 for restaurant in restaurants:
                     restaurant_data = {"valid": True}
-                    database.child(event_id).child("emails").child(local_part).child(restaurant["id"]).set(restaurant_data)
+                    database.\
+                        child(event_id).\
+                        child("emails").\
+                        child(local_part).\
+                        child(restaurant["id"]).\
+                        set(restaurant_data)
 
         # add event to Firebase
         database.child(event_id).child("location").set(location)
@@ -195,7 +217,7 @@ def detail_vote():
         url = urllib.request.Request(
             "https://api.yelp.com/v3/businesses/%s" % restaurant.key())
         url.add_header('Authorization',
-                       'Bearer hJ9D0lMCziUpj-OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-Fegf_rJOLQ_eN1zebXB-3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_9CTWsLhPDy9a6JaWnYx')
+                       'Bearer %s' % yelp_bearer_token)
         json_response = json.loads(urllib.request.urlopen(url).read())
         choice["id"] = restaurant.key()
         choice["name"] = json_response["name"]
@@ -243,7 +265,7 @@ def detail_event():
         url = urllib.request.Request(
             "https://api.yelp.com/v3/businesses/%s" % restaurant_id)
         url.add_header('Authorization',
-                       'Bearer hJ9D0lMCziUpj-OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-Fegf_rJOLQ_eN1zebXB-3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_9CTWsLhPDy9a6JaWnYx')
+                       'Bearer %s' % yelp_bearer_token)
 
         return jsonify(json.loads(urllib.request.urlopen(url).read()))
     else:
