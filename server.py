@@ -89,6 +89,7 @@ def vote():
     if request.method == 'POST':
         # parse out parameters from POST request
         user_email = request.args.get("user_email")
+        local_part = user_email.split('@')[0]
         restaurant_id = request.args.get("restaurant_id")
         approval = request.args.get("approval")
         event_id = request.args.get("event_id")
@@ -103,7 +104,15 @@ def vote():
         # set vote
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
         # remove restaurant_id from user
-        database.child(event_id).child("emails").child(user_email).remove(restaurant_id, user['idToken'])
+
+        user_values = database.child(event_id).child("emails").child(local_part).get(user['idToken']).val()
+
+        for val in user_values:
+            if val != "domain":
+                for restaurant in val:
+                    if restaurant == restaurant_id:
+                        database.child(event_id).child("emails").child(local_part).remove(val, user['idToken'])
+
         return Response(status=200)
 
     if request.method == 'GET':
@@ -132,24 +141,25 @@ def detail_vote():
     event_id = request.args.get("event_id")
     user_name = request.args.get("user_email")
     event_details = database.child(event_id).get(user['idToken']).val()
+    local_part = user_name.split('@')[0]
 
     restaurants = event_details["restaurants"]
-    restaurants_not_voted = event_details["users"][user_name]
+    user_values = event_details["emails"][local_part]
     # restaurants_not_voted = database.child(event_id).child("emails").child(user_email).get(user['idToken']).val()
     # user-restaurants = database.child(event_id).child("emails").child(user_email).get(restaurant, user['idToken'])
 
     # map for restaurants and their validity
     choices = []
 
-    i = 0
     for restaurant in restaurants:
-        if restaurant in restaurants_not_voted:
-            choices.append({restaurant: True})
-            i = i + 1
-        else:
-            choices.append({restaurant: False})
-            i = i + 1
-
+        # if key == domain
+        for val in user_values:
+            if val != "domain":
+                for not_voted_restaurants in val:
+                    if restaurant == not_voted_restaurants:
+                        choices.append({restaurant: True})
+                    else:
+                        choices.append({restaurant: False})
     choice = {"choices": choices}
     # use jsonify
     return json.dumps(choice)
