@@ -60,7 +60,7 @@ $("#button").click(function() {
 	}
 
 	var params =
-		"event_id=" + generateUUID() +
+		"event_id=" + generateEventId() +
 		"&categories=" + category +
 		"&radius=" + mDistance +
 		"&location=" + "UBC%2C+Vancouver%2C+British+Columbia" +
@@ -79,7 +79,7 @@ $("#button").click(function() {
 	//post with post object here
 });
 
-function generateUUID() {
+function generateEventId() {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (d + Math.random()*16)%16 | 0;

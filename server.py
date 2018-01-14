@@ -3,6 +3,7 @@ import urllib.parse
 import urllib.request
 import json
 import pyrebase
+import smtplib
 
 app = Flask(__name__)
 
@@ -63,6 +64,8 @@ def options():
         database.child(event_id).child("price").set(price)
         database.child(event_id).child("open_at").set(open_at)
 
+        emails= []
+        send_event_id_email(event_id, emails)
         return Response(status=200, mimetype='application/json')
     abort(405)
 
@@ -144,3 +147,15 @@ def detail_event():
             return json.dumps(current_winner)
     else:
         return json.dumps("voting not finished")
+
+
+def send_event_id_email(event_id, emails):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login("weeatruffles1@gmail.com", "weeatruffles2")
+
+    event_id_msg = event_id
+    server.sendmail("weeattruffles1@gmail.com", "frostyyshadows@gmail.com", event_id_msg)
+    for email in emails:
+        server.sendmail("weeattruffles1@gmail.com", email, event_id_msg)
+    server.quit()
