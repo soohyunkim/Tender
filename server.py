@@ -116,19 +116,24 @@ def vote():
         return Response(status=200)
 
     if request.method == 'GET':
-        return render_template('votingPage.html'), 200
+        user_email = request.args.get("user_email")
+        event_id = request.args.get("event_id")
+        return render_template('votingPage.html', event_id=event_id, user_email=user_email), 200
     abort(405)
 
 
 # GET here to retrieve event page
+# if voting is over and the event already has a winner, show ConfirmedEventPage.html
+# if voting hasn't ended yet, show votingPage.html
 @app.route('/event')
 def event():
     event_id = request.args.get("event_id")
+    email = request.args.get("email")
     event_details = database.child(event_id).get(user['idToken']).val()
     if hasattr(event_details, "winner"):
-        return render_template('ConfirmedEventPage.html')
+        return render_template('ConfirmedEventPage.html', event_id=event_id, user_email=email)
     else:
-        return render_template('votingPage.html')
+        return render_template('votingPage.html', event_id=event_id, user_email=email)
     abort(405)
 
 
