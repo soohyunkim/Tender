@@ -86,14 +86,9 @@ def vote():
             vote = 0
 
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
-        # return json representing votes
-        # return render_template('TODO.html'), 200
 
     if request.method == 'GET':
-        prev_vote = database.child(event_id).child("restaurants").child(restaurant_id).child("votes").get(
-            user['idToken']).val()
-
-        # return voting status, for every restaurant
+        return render_template('TODO.html')
     abort(404)
 
 # GET here to retrieve event page
@@ -106,6 +101,7 @@ def event():
 @app.route('/detail/vote')
 def detail_vote():
     # return list of resto they can vote on
+    # return json representing votes
     if request.method == 'GET':
         event_id = request.args.get("event_id")
         return database.child(event_id).child("restaurants").get(user['idToken']).val(), 200
