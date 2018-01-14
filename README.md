@@ -113,6 +113,11 @@ GET format in JSON:
     "restaurant_id": ...
 }
 ```
+
+Sample response:
+```JSON
+"{event_id: {\"categories\": \"restaurants\", \"limit\": \"15\", \"location\": \"UBC, Vancouver, British Columbia\", \"open_at\": \"1515918240\", \"price\": \"2,3,4\", \"radius\": \"10000\", \"restaurants\": {\"baru-latino-vancouver\": {\"votes\": 0}, \"blue-martini-jazz-cafe-vancouver\": {\"votes\": 5}, \"corduroy-vancouver\": {\"votes\": 0}, \"darbys-pub-vancouver\": {\"votes\": 0}, \"elwoods-vancouver\": {\"votes\": 0}, \"local-public-eatery-vancouver-3\": {\"votes\": 0}, \"lucky-taco-vancouver-2\": {\"votes\": 0}, \"mahony-and-sons-vancouver-4\": {\"votes\": 0}, \"the-cove-neighbourhood-pub-vancouver\": {\"votes\": 0}, \"the-dunbar-public-house-vancouver\": {\"votes\": 0}, \"the-ellis-vancouver-2\": {\"votes\": 0}, \"the-kitchen-table-vancouver\": {\"votes\": 0}, \"the-naam-vancouver-2\": {\"votes\": 0}, \"the-wolf-and-hound-vancouver\": {\"votes\": 0}, \"yaggers-vancouver-3\": {\"votes\": 0}}, \"winner\": \"blue-martini-jazz-cafe-vancouver\"}}"
+```
 `event_name` is the user-input name of the event,
 `event_type` is a string representing what type of event it is (for possible values see above),
 `date` is user-input time and date of the event in Unix epoch time,
