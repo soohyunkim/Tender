@@ -79,7 +79,12 @@ def vote():
         event_id = request.args.get("event_id")
 
         prev_vote = database.child(event_id).child("restaurants").child(restaurant_id).child("votes").get(user['idToken']).val()
-        vote = 1 if approval else 0
+
+        if approval == "true":
+            vote = 1
+        else:
+            vote = 0
+
         database.child(event_id).child("restaurants").child(restaurant_id).child("votes").set(prev_vote + vote)
         # return json representing votes
         # return render_template('TODO.html'), 200
