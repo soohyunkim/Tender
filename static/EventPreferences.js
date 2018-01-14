@@ -35,8 +35,10 @@ $("#button").click(function() {
 	var priceFour = $("#price-four-button").is(':checked');
 	var priceFive = $("#price-five-button").is(':checked');
 
-	var postObj = {"category": category, "distance": kmDistance, "priceOne": priceOne, "priceTwo": priceTwo, "priceThree": priceThree, "priceFour": priceFour, "priceFive": priceFive};
-
+	var dateAndTime = Date.parse($("#date-input").val())/1000;
+	
+	var postObj = {"category": category, "distance": kmDistance, "priceOne": priceOne, "priceTwo": priceTwo, "priceThree": priceThree, "priceFour": priceFour, "priceFive": priceFive,
+	"dateAndTime":dateAndTime};
 	console.log(postObj);
 	//post with post object here
 });
