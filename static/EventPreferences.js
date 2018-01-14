@@ -2,7 +2,6 @@ $( document ).ready(function() {
 	console.log("js file is working");
 });
 
-
 $("#button").click(function() {
 	console.log("continue click working");
 	var category = null;
