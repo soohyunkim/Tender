@@ -1,5 +1,4 @@
 from flask import Flask, abort, request, render_template, redirect, url_for
-from firebase import firebase
 import urllib
 import urllib2
 import json
@@ -16,6 +15,7 @@ config = {
 }
 
 firebase = pyrebase.initialize_app(config)
+database = firebase.database()
 
 auth = firebase.auth()
 # authenticate a user
@@ -33,7 +33,7 @@ def index():
 def options():
     if request.method == 'POST':
         # parse out parameters from POST request
-
+        event_id = request.args.get("event_id")
         location = request.args.get("location")
         radius = request.args.get("radius")
         categories = request.args.get("categories")
@@ -41,18 +41,18 @@ def options():
         price = request.args.get("price")
         open_at = request.args.get("open_at")
 
-        params = urllib.urlencode({'location': location, 'radius': radius, 'categories': categories, 'limit': limit, 'price': price, 'open_at': open_at})
+        params = urllib.request.urlencode({'location': location, 'radius': radius, 'categories': categories, 'limit': limit, 'price': price, 'open_at': open_at})
 
         # make GET request to Yelp API using parameters
-        url = urllib2.Request("https://api.yelp.com/v3/businesses/search?%s" % params)
+        url = urllib.Request("https://api.yelp.com/v3/businesses/search?%s" % params)
         url.add_header('Authorization', 'Bearer hJ9D0lMCziUpj-OSDaiqXc2noXKoPylRe76MsfN63jj60RSJzHMf-Fegf_rJOLQ_eN1zebXB-3E7aO0ZLTx8aeYTnqfr8halD7Te8PES9OD8_9CTWsLhPDy9a6JaWnYx')
-        json_response = json.loads(urllib2.urlopen(url).read())
-        # print(json_response)
+        json_response = json.loads(urllib.urlopen(url).read())
 
         restaurants = json_response["businesses"]
-        # add each restaurant to Firebase
-        for restaurant in restaurants:
-            print(restaurant)
+        # add restaurants to Firebase
+        database.child(event_id).child("restaurants").set(restaurants)
+        # returns json representing restaurants
+        #return render_template('TODO.html'), 200
         abort(404)
     abort(404)
 
@@ -67,6 +67,9 @@ def vote():
 # GET here to retrieve event page
 @app.route('event')
 def event():
+    if request.method == 'GET':
+        event_id = request.args.get("event_id")
+        return database.child(event_id).child("restaurants").get(user['idToken']).val(), 200
     abort(404)
 
 
