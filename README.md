@@ -6,10 +6,16 @@ A simple web app that helps you and your friends plan an event by voting on near
 
 ## Tender Backend
 
+* `git clone https://github.com/soohyunkim/WeEatRuffles.git`
+* `cd WeEatRuffles/`
+* Install [virtualenv](https://virtualenv.pypa.io/en/stable/): `pip install virtualenv`
+* Create environment: `virtualenv ruffles` (or whatever you want to name it)
+* Activate environemnt: `. ruffles/bin/activate`
 * Install [Flask](http://flask.pocoo.org): `pip install flask`
 * Install [Pyrebase](https://github.com/thisbejim/Pyrebase): `pip install pyrebase`
 * Set env variable: `export FLASK_APP=server.py`
 * `flask run`
+* If it complains about certificates on Mac OS X: `/Applications/Python\ 3.6/Install\ Certificates.command`
 
 ## API
 
