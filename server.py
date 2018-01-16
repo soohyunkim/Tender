@@ -5,6 +5,7 @@ import json
 import pyrebase
 import smtplib
 from email.mime.text import MIMEText
+import logging
 
 app = Flask(__name__)
 
@@ -27,6 +28,8 @@ yelp_bearer_token = 'hJ9D0lMCziUpj-' \
 
 firebase = pyrebase.initialize_app(firebase_config)
 database = firebase.database()
+logging.basicConfig(filename='debug.log', level=logging.DEBUG)
+logging.info("Starting new session")
 
 auth = firebase.auth()
 # authenticate a user
