@@ -60,7 +60,12 @@ def options():
         price = request.args.get("price")
         open_at = request.args.get("open_at")
 
-        if not location or not radius or not categories or not limit or not price or not open_at:
+        if (not location or
+                not radius or
+                not categories or
+                not limit or
+                not price or
+                not open_at):
             abort(Response(status=400))
 
         params = urllib.parse.urlencode({'location': location,
