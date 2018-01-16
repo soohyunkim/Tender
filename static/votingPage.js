@@ -9,27 +9,32 @@ $(document).ready(function () {
 
     var url = "http://127.0.0.1:5000/detail/vote?event_id=" + event_id + "&user_email=" + user_email;
     var http = new XMLHttpRequest();
+    http.onload = function () {
+        populate_page(event_id, http.response);
+    };
     http.open("GET", url, false);
     http.send();
     console.log("Made the http request");
-    http.onload = function () {
-        //TODO this doesn't seem to actually be called
-        populate_page(event_id, http.response);
-    };
 });
 
-function populate_page(event_id, restaurant_details) {
+function populate_page(event_id, restaurant_details_json) {
     console.log("In populate_page");
-    if (restaurant_details["valid"]) {
-        document.getElementById("restaurant_name").innerHTML = restaurant_details["name"];
+    restaurant_details = JSON.parse(restaurant_details_json);
+    console.log(restaurant_details_json);
+    //console.log(restaurant_details["restaurant"]);
+    if (restaurant_details["restaurant"]["valid"]) {
+        document.getElementById("restaurant_name").innerHTML = restaurant_details["restaurant"]["name"];
+        document.getElementById("img1").src = restaurant_details["restaurant"]["photos"][0];
+        document.getElementById("img2").src = restaurant_details["restaurant"]["photos"][1];
+        document.getElementById("img3").src = restaurant_details["restaurant"]["photos"][2];
     }
     else {
         console.log("Didn't get true");
         //TODO redirect to event page
     }
-    var restaurants = event_details[event_id]["restaurants"];
-    for (var i = 0; i < restaurants.size; i++) {
-    }
+    // var restaurants = event_details[event_id]["restaurants"];
+    // for (var i = 0; i < restaurants.size; i++) {
+    // }
 }
 
 $("#button").click(function () {
