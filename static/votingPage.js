@@ -34,7 +34,11 @@ $("#button").click(function () {
 });
 
 function submit_vote(user_email, restaurant_id, approval, event_id) {
-    var url = "http://127.0.0.1:5000/vote?" + "user_email=" + user_email + "&restaurant_id=" + restaurant_id + "&approval=" + approval + "&event_id=" + event_id;
+    var url = "http://127.0.0.1:5000/vote?" +
+        "user_email=" + user_email +
+        "&restaurant_id=" + restaurant_id +
+        "&approval=" + approval +
+        "&event_id=" + event_id;
     var http = new XMLHttpRequest();
     http.open("POST", url, false);
     http.send();

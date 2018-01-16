@@ -290,12 +290,9 @@ def send_event_id_email(event_id, emails):
     server.login("weeatruffles1@gmail.com", "weeatruffles2")
 
     for email in emails:
-        event_id_msg = "http://127.0.0.1:5000" + \
-                       "/event?" + \
-                       "event_id=" + \
-                       event_id + \
-                       "&email=" + \
-                       email
+        event_id_msg = "http://127.0.0.1:5000/event?" + \
+                       "event_id=" + event_id + \
+                       "&email=" + email
         event_id_msg_link = MIMEText(u'<a href=' +
                                      event_id_msg +
                                      '>You\'ve been invited to an event!</a>',
