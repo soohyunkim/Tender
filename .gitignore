@@ -4,3 +4,4 @@ ruffles
 *.swp
 static/EventPreferences.js~
 templates/EventPreferencesForm.html~
+*.log
