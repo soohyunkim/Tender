@@ -193,7 +193,6 @@ def event():
         return render_template('votingPage.html',
                                event_id=event_id,
                                user_email=email)
-    abort(405)
 
 
 # GET here to retrieve voting details
