@@ -4,9 +4,8 @@
 $(document).ready(function () {
     console.log("votingPage.js file is working");
 
-    //TODO these should be added to votingPage.html
-    var event_id = $("#event_id");
-    var user_email = $("#user_email");
+    var event_id = document.getElementById("event_id").innerHTML;
+    var user_email = document.getElementById("user_email").innerHTML;
 
     var url = "http://127.0.0.1:5000/detail/vote?event_id=" + event_id + "&user_email=" + user_email;
     var http = new XMLHttpRequest();
