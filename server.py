@@ -215,29 +215,28 @@ def detail_vote():
         child(local_part). \
         get(user['idToken'])
 
-    # map for restaurants and their validity
-    choices = []
-
-    for restaurant in restaurants.each():
-        choice = {}
-        valid = False
+    restaurant_data = {}
+    restaurants = restaurants.each()
+    if restaurants:
+        restaurant = restaurants.pop().key()
         for user_restaurant in user_restaurants.each():
-            if restaurant.key() == user_restaurant.key():
+            if restaurant == user_restaurant.key():
                 valid = True
-        url = urllib.request.Request(
-            "https://api.yelp.com/v3/businesses/%s" % restaurant.key())
+        url = urllib.request.Request("https://api.yelp.com/v3/businesses/%s"
+                                     % restaurant)
         url.add_header('Authorization',
                        'Bearer %s' % yelp_bearer_token)
         json_response = json.loads(urllib.request.urlopen(url).read())
-        choice["id"] = restaurant.key()
-        choice["name"] = json_response["name"]
-        choice["photos"] = json_response["photos"]
-        choice["price"] = json_response["price"]
-        choice["location"] = json_response["location"]
-        choice["valid"] = valid
-        choices.append(choice)
+        restaurant_data["id"] = restaurant
+        restaurant_data["name"] = json_response["name"]
+        restaurant_data["photos"] = json_response["photos"]
+        restaurant_data["price"] = json_response["price"]
+        restaurant_data["location"] = json_response["location"]
+        restaurant_data["valid"] = True
+    else:
+        restaurant_data["valid"] = False
 
-    return jsonify({"choices": choices})
+    return jsonify({"restaurant": restaurant_data})
 
 
 # GET here to retrieve event details
