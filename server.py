@@ -181,18 +181,18 @@ def vote():
 @app.route('/event')
 def event():
     event_id = request.args.get("event_id")
-    email = request.args.get("email")
+    user_email = request.args.get("user_email")
     event_details = database. \
         child(event_id). \
         get(user['idToken']).val()
     if hasattr(event_details, "winner"):
         return render_template('ConfirmedEventPage.html',
                                event_id=event_id,
-                               user_email=email)
+                               user_email=user_email)
     else:
         return render_template('votingPage.html',
                                event_id=event_id,
-                               user_email=email)
+                               user_email=user_email)
 
 
 # GET here to retrieve voting details
