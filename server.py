@@ -14,7 +14,7 @@ firebase_config = {
     "authDomain": "weeatruffles.firebaseapp.com",
     "databaseURL": "https://weeatruffles.firebaseio.com",
     "storageBucket": "weeatruffles.appspot.com",
-    "serviceAccount": "static/WeEatRuffles-bfa3023c5afe.json"
+    "serviceAccount": os.path.dirname(os.path.realpath(__file__)) + "/static/WeEatRuffles-bfa3023c5afe.json"
 }
 
 yelp_bearer_token = 'hJ9D0lMCziUpj-' \
