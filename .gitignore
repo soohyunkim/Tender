@@ -5,3 +5,4 @@ ruffles
 static/EventPreferences.js~
 templates/EventPreferencesForm.html~
 *.log
+*.pyc
